@@ -1,0 +1,28 @@
+{
+"title": "Entity monitor",
+"config": {
+"step": {
+"user": {
+"title": "Entity monitor",
+"description": "Configureer Entity monitor en hoe artikelen worden gepresenteerd.",
+"data": {
+"entities": "Entiteiten",
+"dwains_notifications": "Schakel Dwains Dashboard-meldingen in"
+}
+}
+},
+"error": {
+"cannot_fetch_feeds": "Kan de lijst met NOS-feeds niet ophalen."
+}
+},
+"options": {
+"step": {
+"init": {
+"data": {
+"entities": "Entiteiten",
+"dwains_notifications": "Schakel Dwains Dashboard-meldingen in"
+}
+}
+}
+}
+}
