@@ -1,0 +1,3 @@
+rescan:
+  name: Rescan Entities
+  description: Manually rescan all monitored entities and refresh states.

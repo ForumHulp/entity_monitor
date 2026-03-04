@@ -8,18 +8,21 @@ from homeassistant.helpers.event import (
 )
 from homeassistant.core import callback
 from homeassistant.const import STATE_UNKNOWN
+from .const import DOMAIN, NAME, MANUFACTURER, MODEL
 
 _LOGGER = logging.getLogger(__name__)
 
-DOMAIN = "entity_monitor"
 
 UNAVAILABLE_STATES = {"unavailable", "unknown"}
 SCAN_INTERVAL = timedelta(seconds=2)
 
 
 async def async_setup_entry(hass, entry, async_add_entities):
-    async_add_entities([EntityMonitorSensor(hass, entry)], True)
+    sensor = EntityMonitorSensor(hass, entry)
 
+    hass.data[DOMAIN][entry.entry_id]["sensor"] = sensor
+
+    async_add_entities([sensor], True)
 
 class EntityMonitorSensor(SensorEntity):
     _attr_has_entity_name = True
@@ -48,6 +51,9 @@ class EntityMonitorSensor(SensorEntity):
     # --------------------------------------------------
     # Properties
     # --------------------------------------------------
+    @property
+    def unique_id(self):
+        return f"{DOMAIN}_{self.entry.entry_id}"
 
     @property
     def native_value(self):
@@ -81,6 +87,18 @@ class EntityMonitorSensor(SensorEntity):
                 for entity_id in self._entities
             ],
         }
+
+    @property
+    def device_info(self):
+        return {
+            "identifiers": {(DOMAIN, self.entry.entry_id)},
+            "name": NAME,
+            "manufacturer": MANUFACTURER,
+            "model": MODEL,
+            "sw_version": self.entry.version,
+            "entry_type": "service",
+        }
+
 
     # --------------------------------------------------
     # Lifecycle

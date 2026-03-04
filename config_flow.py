@@ -1,9 +1,9 @@
 import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.helpers import selector
+from .const import DOMAIN
 
-DOMAIN = "entity_monitor"
-
+ALARM_GROUP = "group.alarm_away_sensors"
 
 class EntityMonitorConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     VERSION = 1
@@ -15,11 +15,23 @@ class EntityMonitorConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 data=user_input,
             )
 
+        default_entities = []
+
+        # Only auto-load group if no entries exist yet
+        if not self._async_current_entries():
+            group_state = self.hass.states.get(ALARM_GROUP)
+
+            if group_state:
+                default_entities = group_state.attributes.get("entity_id", [])
+
         return self.async_show_form(
             step_id="user",
             data_schema=vol.Schema(
                 {
-                    vol.Required("entities"): selector.EntitySelector(
+                    vol.Required(
+                        "entities",
+                        default=default_entities
+                    ): selector.EntitySelector(
                         selector.EntitySelectorConfig(multiple=True)
                     ),
                     vol.Optional("dwains_notifications", default=True): bool,

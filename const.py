@@ -1,0 +1,5 @@
+DOMAIN = "entity_monitor"
+NAME = "Entity Monitor"
+VERSION = "1.0.0"
+MANUFACTURER = "Custom Integration"
+MODEL = "Entity Availability Monitor"
